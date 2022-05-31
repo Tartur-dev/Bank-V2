@@ -8,17 +8,22 @@ namespace Application.Manager
         private Player _MainPlayer;
         public List<Player> PlayerList { get; }
 
+        public bool IsRunning { get; set; }
+
         public ConsoleApplication(Player mainPlayer)
         {
             _MainPlayer = mainPlayer;
             PlayerList = new List<Player>();
+
+            IsRunning = false;
         }
 
         public void Start()
         {
             Console.WriteLine($"Bienvenue, {_MainPlayer.Name} !\n");
+            IsRunning = true;
 
-            while (true)
+            while (IsRunning)
             {
                 string input;
                 Input.Open(out input, $"{_MainPlayer.Name}'s app> ", "Vous ne pouvez pas saisir de texte vide");
@@ -29,7 +34,7 @@ namespace Application.Manager
                     continue;
                 }
 
-                break;
+                IsRunning = false;
             }
         }
         
