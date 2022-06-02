@@ -1,4 +1,4 @@
-namespace Application.IO
+namespace Bank_V2.IO
 {
     public static class Input
     {

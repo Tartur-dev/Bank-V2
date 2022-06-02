@@ -1,8 +1,8 @@
-using Application.Entities;
-using Application.Manager;
-using Application.IO;
+using Bank_V2.Entities;
+using Bank_V2.Manager;
+using Bank_V2.IO;
 
-namespace Application
+namespace Bank_V2
 {    
     public class Program
     {

@@ -1,4 +1,4 @@
-namespace Application.Entities
+namespace Bank_V2.Entities
 {
     public class Player
     {
