@@ -1,24 +1,21 @@
-using Bank_V2.Entities;
-using Bank_V2.Manager;
-using Bank_V2.IO;
+using BankV2.Entities;
+using BankV2.Manager;
+using BankV2.IO;
 
-namespace Bank_V2
-{    
-    public class Program
+namespace BankV2;
+
+public class Program
+{
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            string playerName;
+        Input.OpenIf(out var playerName,
+            "Quel est votre nom ? : ",
+            "Nom invalide. Votre pseudo doit faire entre 3 et 20 caractères",
+            name => name.Length is >= 3 and <= 20);
 
-            Input.OpenIf(out playerName,
-                "Quel est votre nom ? : ",
-                "Nom invalide. Votre pseudo doit faire entre 3 et 20 caractères",
-                (playerName) => playerName.Length >= 3 && playerName.Length <= 20);
+        var player = new Player(playerName);
 
-            Player player = new Player(playerName);
-
-            ConsoleApplication application = new ConsoleApplication(player);
-            application.Start();
-        }
+        var application = new ConsoleApplication(player);
+        application.Start();
     }
 }

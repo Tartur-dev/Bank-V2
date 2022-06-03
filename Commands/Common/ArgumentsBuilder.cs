@@ -1,41 +1,39 @@
-﻿using System;
+﻿
+namespace BankV2.Commands.Common;
 
-namespace Bank_V2.Commands.Common
+public class ArgumentsBuilder
 {
-    public class ArgumentsBuilder
+    private readonly List<string> _arguments;
+    private bool _required;
+
+    public ArgumentsBuilder()
     {
-        private List<string> _arguments;
-        private bool _required;
+        _arguments = new List<string>();
+        _required = false;
+    }
 
-        public ArgumentsBuilder()
+    public ArgumentsBuilder Add(string argument)
+    {
+        _arguments.Add(argument);
+        return this;
+    }
+
+    public ArgumentsBuilder Required(bool required)
+    {
+        _required = required;
+        return this;
+    }
+
+    public string Build()
+    {
+        var finalString = _required ? "<" : "[";
+
+        foreach (var argument in _arguments)
         {
-            _arguments = new List<string>();
-            _required = false;
+            finalString += argument;
+            if (argument != _arguments.Last()) finalString += "/";
         }
 
-        public ArgumentsBuilder Add(string argument)
-        {
-            _arguments.Add(argument);
-            return this;
-        }
-
-        public ArgumentsBuilder Required(bool required)
-        {
-            _required = required;
-            return this;
-        }
-
-        public string Build()
-        {
-            string finalString = _required ? "<" : "[";
-
-            foreach (var argument in _arguments)
-            {
-                finalString += argument;
-                if (argument != _arguments.Last()) finalString += "/";
-            }
-
-            return finalString + (_required ? "> " : "] ");
-        }
+        return finalString + (_required ? "> " : "] ");
     }
 }
