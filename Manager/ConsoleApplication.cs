@@ -1,57 +1,55 @@
-using Bank_V2.Entities;
-using Bank_V2.IO;
-using Bank_V2.Commands.Common;
+using BankV2.Entities;
+using BankV2.IO;
 
-namespace Bank_V2.Manager
+namespace BankV2.Manager;
+
+public class ConsoleApplication
 {
-    public class ConsoleApplication
+    private readonly Player _mainPlayer;
+    private readonly CommandManager _commandManager;
+    
+    public readonly List<Player> PlayerList;
+    
+    public bool Running { get; set; }
+
+    public ConsoleApplication(Player mainPlayer)
     {
-        private Player _mainPlayer;
-        private CommandManager _commandManager;
-        private List<Player> _playerList;
+        _mainPlayer = mainPlayer;
+        PlayerList = new List<Player> {_mainPlayer};
+        _commandManager = new CommandManager(this);
+        Running = false;
+    }
 
-        public bool IsRunning { get; set; }
+    public void Start()
+    {
+        var pseudo = _mainPlayer.Name;
 
-        public ConsoleApplication(Player mainPlayer)
+        Console.WriteLine($"Bienvenue, {pseudo} !\n");
+        Running = true;
+
+        while (Running)
         {
-            _mainPlayer = mainPlayer;
-            _commandManager = new CommandManager();
-            _playerList = new List<Player>();
+            Console.WriteLine();
+            Input.Open(out var input, $"{pseudo}'s app> ", "Vous ne pouvez pas saisir de texte vide");
 
-            IsRunning = false;
-        }
+            var arguments = input.Split(' ').ToList();
+            var command = _commandManager.GetCommand(arguments[0]);
+            
+            arguments.RemoveAt(0);
 
-        // À optimiser
-        public void Start()
-        {
-            string pseudo = _mainPlayer.Name;
-
-            Console.WriteLine($"Bienvenue, {pseudo} !\n");
-            IsRunning = true;
-
-            while (IsRunning)
+            if (command != null)
             {
-                string input;
-                Input.Open(out input, $"{pseudo}'s app> ", "Vous ne pouvez pas saisir de texte vide");
-
-                List<string> arguments = input.Split(' ').ToList();
-
-                Command command = _commandManager.GetCommand(arguments[0]);
-
-                if (command != null)
+                if (!command.Run(_mainPlayer, arguments))
                 {
-                    if (!command.Run(arguments.GetRange(1, arguments.Count - 1).ToArray()))
-                    {
-                        Console.WriteLine($"Commande invalide. Utilisation correcte : \n{command.Help}");
-                    }
-
-                    continue;
+                    Console.WriteLine($"Commande invalide. Utilisation correcte : \n{command.Help}");
                 }
 
-                Console.WriteLine($"Commande {arguments[0]} introuvable.");
+                continue;
             }
 
-            Console.WriteLine($"Ravi de vous avoir connu, {pseudo} !");
+            Console.WriteLine($"Commande {arguments[0]} introuvable.");
         }
+
+        Console.WriteLine($"Ravi de vous avoir connu, {pseudo} !");
     }
 }
