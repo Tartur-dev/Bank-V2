@@ -1,14 +1,12 @@
-namespace Bank_V2.Entities
+namespace BankV2.Entities;
+public class Player
 {
-    public class Player
-    {
-        public string Name { get; }
-        public decimal Money { get; }
+    public string Name { get; }
+    public decimal Money { get; }
 
-        public Player(string name)
-        {
-            Name = name;
-            Money = 0;
-        }
+    public Player(string name)
+    {
+        Name = name;
+        Money = 0;
     }
 }
