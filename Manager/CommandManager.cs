@@ -1,25 +1,29 @@
-﻿using Bank_V2.Commands;
-using Bank_V2.Commands.Common;
+﻿using BankV2.Commands.Common;
+using BankV2.Commands.Management.Console;
+using BankV2.Commands.Management.Entity;
 
-namespace Bank_V2.Manager
+namespace BankV2.Manager;
+public class CommandManager
 {
-    public class CommandManager
+    public readonly Command[] Commands;
+    
+    public CommandManager(ConsoleApplication app)
     {
-        private Command[] _commands;
+        Commands = new Command[] {
+            // Console Management
+            new Echo(),
+            new Clear(),
+            new Exit(app),
+            new Help(this),
+            
+            // Player Management
+            new CreatePlayer(app),
+            new PlayerList(app)
+        };
+    }
 
-        public CommandManager()
-        {
-            _commands = new Command[] {
-                new Test()
-            };
-        }
-
-        public Command? GetCommand(string name)
-        {
-            foreach (var cmd in _commands)
-                if (string.Equals(name, cmd.Name, StringComparison.OrdinalIgnoreCase)) return cmd;
-
-            return null;
-        }
+    public Command? GetCommand(string name)
+    {
+        return Commands.FirstOrDefault(cmd => string.Equals(name, cmd.Name, StringComparison.OrdinalIgnoreCase));
     }
 }
